@@ -1,0 +1,18 @@
+[project]
+name = "sansodhan-charcha"
+version = "0.1.0"
+description = "Sansodhan charcha is a Nepali RAG based application that aims to make understanding of new Nepali amendments easier. "
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "chromadb>=0.6.3",
+    "grpcio>=1.71.0",
+    "grpcio-tools>=1.71.0",
+    "langdetect>=1.0.9",
+    "pydantic>=2.11.1",
+    "pymupdf>=1.25.5",
+    "python-dotenv>=1.1.0",
+    "sentence-transformers>=4.0.1",
+    "streamlit>=1.44.1",
+    "tqdm>=4.67.1",
+]
