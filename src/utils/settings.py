@@ -16,4 +16,5 @@ class PathSettings:
 class ConstantSettings:
     EMBEDDING_MODEL: str = "BAAI/bge-m3"
     CHUNK_SIZE: int = 150
+    CHUNK_OVERLAP: int = 20
     PERSIST_DIRECTORY: str = "chroma_db"

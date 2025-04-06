@@ -84,7 +84,7 @@ class NepaliRAGBase:
                     results[doc_name] = extracted_text
                 except Exception as e:
                     results[doc_name] = ""
-        return extracted_text
+        return results
     
     def chunk_text(self, text: str):
         raise NotImplementedError("Chunking method not implemented.")
