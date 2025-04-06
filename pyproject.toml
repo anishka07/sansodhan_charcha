@@ -8,6 +8,7 @@ dependencies = [
     "chromadb>=0.6.3",
     "grpcio>=1.71.0",
     "grpcio-tools>=1.71.0",
+    "langchain>=0.3.23",
     "langdetect>=1.0.9",
     "pydantic>=2.11.1",
     "pymupdf>=1.25.5",
