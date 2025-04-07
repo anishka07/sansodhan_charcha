@@ -1,14 +1,16 @@
-import os 
+import os
 import pickle
 from pathlib import Path
 from threading import Lock
-
-from src.utils.logger import get_custom_logger
-from src.utils.settings import PathSettings, ConstantSettings
-from src.repo.chroma_client import ChromaClientSingleton
+from typing import List, Dict
 
 import fitz
+import numpy as np
 from sentence_transformers import SentenceTransformer
+
+from src.repo.chroma_client import ChromaClientSingleton
+from src.utils.logger import get_custom_logger
+from src.utils.settings import PathSettings
 
 
 class STSingleton:
@@ -92,16 +94,9 @@ class NepaliRAGBase:
     def embed_text(self, chunked_text: list[str]):
         raise NotImplementedError("Embedding method not implemented.")
     
-    def save_embeddings(self, embedded_text):
+    def save_embeddings(self, chunks: List[str], embeddings: np.ndarray, metadata: List[Dict]) -> str:
         raise NotImplementedError("Saving embeddings method not implemented.")
     
     def retrieve_results(self, query: str, top_k: int):
         raise NotImplementedError("Retrieving results method not implemented.")
-
     
-if __name__ == "__main__":
-    a = NepaliRAGBase(
-        chunk_size=ConstantSettings.CHUNK_SIZE,
-        model_name=ConstantSettings.EMBEDDING_MODEL
-    )
-    extracted_text = a.extract_text_from_documents(PathSettings.PDF_DIR / "example1.pdf")
