@@ -73,6 +73,7 @@ class NepaliRAGBase:
             cache_data = self._load_cache_from_pkl(doc_name)
 
             if cache_data:
+                self.logger.info(f"Loading cache for {doc_name}")
                 results[doc_name] = cache_data
                 continue
             
@@ -82,16 +83,18 @@ class NepaliRAGBase:
                     with fitz.open(document_path) as doc:
                         for page in doc:
                             extracted_text += page.get_text()
+                    self.logger.info(f"Saving cache for {doc_name}")
                     self._save_cache_as_pkl(doc_name, extracted_text)
                     results[doc_name] = extracted_text
                 except Exception as e:
+                    self.logger.error(f"Error reading PDF {doc_name}: {e}")
                     results[doc_name] = ""
         return results
     
-    def chunk_text(self, text: str):
+    def chunk_text(self, text: str) -> list[str]:
         raise NotImplementedError("Chunking method not implemented.")
     
-    def embed_text(self, chunked_text: list[str]):
+    def embed_text(self, chunked_text: list[str]) -> np.ndarray:
         raise NotImplementedError("Embedding method not implemented.")
     
     def save_embeddings(self, chunks: List[str], embeddings: np.ndarray, metadata: List[Dict]) -> str:
