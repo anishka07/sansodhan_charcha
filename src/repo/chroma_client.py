@@ -26,3 +26,5 @@ class ChromaClientSingleton:
     
     def get_client(self):
         return self.client
+
+
