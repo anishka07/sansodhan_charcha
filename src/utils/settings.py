@@ -17,4 +17,10 @@ class ConstantSettings:
     EMBEDDING_MODEL: str = "BAAI/bge-m3"
     CHUNK_SIZE: int = 150
     CHUNK_OVERLAP: int = 20
-    PERSIST_DIRECTORY: str = "chroma_db"
+
+
+if __name__ == '__main__':
+    print(PathSettings.LOG_DIR)
+    print(PathSettings.CHROMA_DIR)
+    print(PathSettings.CACHE_DIR)
+    print(PathSettings.PDF_DIR)

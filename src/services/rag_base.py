@@ -48,7 +48,8 @@ class NepaliRAGBase:
         cache_path = self.save_dir_path / f"{doc_name}.pkl"
         return cache_path
     
-    def get_doc_name(self, document_path: Path):
+    @staticmethod
+    def _get_doc_name(document_path: Path):
         doc_name = str(document_path).split("/")[-1]
         doc_name = doc_name.split(".")[0]
         return doc_name
@@ -69,7 +70,7 @@ class NepaliRAGBase:
     def extract_text_from_documents(self, document_list: list[Path]):
         results = {}
         for document_path in document_list:
-            doc_name = self.get_doc_name(document_path)
+            doc_name = self._get_doc_name(document_path)
             cache_data = self._load_cache_from_pkl(doc_name)
 
             if cache_data:
@@ -83,6 +84,7 @@ class NepaliRAGBase:
                     with fitz.open(document_path) as doc:
                         for page in doc:
                             extracted_text += page.get_text()
+                            extracted_text = " ".join(extracted_text.split())
                     self.logger.info(f"Saving cache for {doc_name}")
                     self._save_cache_as_pkl(doc_name, extracted_text)
                     results[doc_name] = extracted_text

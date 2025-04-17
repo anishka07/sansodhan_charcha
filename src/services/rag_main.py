@@ -1,4 +1,3 @@
-import time
 from pathlib import Path
 from typing import List, Dict, Any
 
@@ -7,7 +6,6 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from tqdm import tqdm
 
 from src.services.rag_base import NepaliRAGBase
-from src.utils.settings import ConstantSettings, PathSettings
 
 
 class NepaliLawRAG(NepaliRAGBase):
