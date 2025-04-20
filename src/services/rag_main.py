@@ -66,7 +66,7 @@ class NepaliLawRAG(NepaliRAGBase):
             results[doc_name] = {
                 "text_length": len(text),
                 "chunks": chunks,
-                "doc_id": doc_id,
+                "doc_id": doc_id
             }
         self.logger.info(f"Successfully processed {len(results)} documents")
         return results
