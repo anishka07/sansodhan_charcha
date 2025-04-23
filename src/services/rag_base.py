@@ -7,10 +7,11 @@ from typing import List, Dict
 import fitz
 import numpy as np
 from sentence_transformers import SentenceTransformer
+from chromadb import Settings, Client
 
 from src.repo.chroma_client import ChromaClientSingleton
 from src.utils.logger import get_custom_logger
-from src.utils.settings import PathSettings
+from src.utils.settings import PathSettings, ConstantSettings
 
 
 class STSingleton:
@@ -41,6 +42,8 @@ class NepaliRAGBase:
         self.logger = get_custom_logger(name="Sansodhan Charcha")
         self.logger.info("Initializing ChromaDB client and SentenceTransformer model...")
         self.embeddings_gen_instance = STSingleton(model_name).get_model()
+        # self.embeddings_gen_instance = SentenceTransformer(ConstantSettings.EMBEDDING_MODEL)
+        # self.chroma_client = Client(Settings(persist_directory=str(PathSettings.CHROMA_DIR)))
         self.chroma_client = ChromaClientSingleton().get_client()
         self.logger.info("ChromaDB client and SentenceTransformer model initialized successfully.")
     
@@ -67,7 +70,7 @@ class NepaliRAGBase:
                 return pickle.load(f)
         return None
 
-    def extract_text_from_documents(self, document_list: list[Path]):
+    def extract_text_from_documents(self, document_list: list[Path]) -> Dict[str]:
         results = {}
         for document_path in document_list:
             doc_name = self._get_doc_name(document_path)

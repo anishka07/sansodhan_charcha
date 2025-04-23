@@ -15,5 +15,8 @@ if __name__ == "__main__":
     document_paths = [PathSettings.PDF_DIR / "example1.pdf"]
 
     extracted_text = r.extract_text_from_documents(document_list=document_paths)
-    text = list(extracted_text.values())
-    print(text[0])
+    print(extracted_text)
+    print("-" * 15)
+    print(type)
+
+    print(f"Total time taken: {time.time() - start_time}")
