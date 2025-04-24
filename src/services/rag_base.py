@@ -1,3 +1,4 @@
+import re 
 import os
 import pickle
 from pathlib import Path
@@ -70,7 +71,7 @@ class NepaliRAGBase:
                 return pickle.load(f)
         return None
 
-    def extract_text_from_documents(self, document_list: list[Path]) -> Dict[str]:
+    def extract_text_from_documents(self, document_list: list[Path]):
         results = {}
         for document_path in document_list:
             doc_name = self._get_doc_name(document_path)
@@ -88,6 +89,7 @@ class NepaliRAGBase:
                         for page in doc:
                             extracted_text += page.get_text()
                             extracted_text = " ".join(extracted_text.split())
+                            extracted_text = re.sub(r'\.{2,}', '', extracted_text)
                     self.logger.info(f"Saving cache for {doc_name}")
                     self._save_cache_as_pkl(doc_name, extracted_text)
                     results[doc_name] = extracted_text

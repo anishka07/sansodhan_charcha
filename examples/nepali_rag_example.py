@@ -1,3 +1,4 @@
+import re 
 import time
 
 from src.services.rag_main import NepaliLawRAG
@@ -15,8 +16,9 @@ if __name__ == "__main__":
     document_paths = [PathSettings.PDF_DIR / "example1.pdf"]
 
     extracted_text = r.extract_text_from_documents(document_list=document_paths)
-    print(extracted_text)
-    print("-" * 15)
-    print(type)
+    a = list(extracted_text.values())
+    b = a[0]
+    b = re.sub(r'\.{2,}', '', b)
+    print(b)
 
     print(f"Total time taken: {time.time() - start_time}")
