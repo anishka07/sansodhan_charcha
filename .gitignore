@@ -15,3 +15,4 @@ wheels/
 chroma_db/
 logs/
 pdfs/
+eg.json

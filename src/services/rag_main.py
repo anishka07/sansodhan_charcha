@@ -18,6 +18,14 @@ class NepaliLawRAG(NepaliRAGBase):
             chunk_overlap: int,
             collection_name: str = None
     ):
+        """
+
+        :param model_name: sentence transformer model name
+        :param chunk_size: chunk size
+        :param use_heavy: used for experimenting
+        :param chunk_overlap: size of overlap between chunks
+        :param collection_name: chromadb collection name
+        """
         super().__init__(chunk_size, model_name, use_heavy)
         self.chunk_overlap = chunk_overlap
         # remove this 
@@ -50,6 +58,11 @@ class NepaliLawRAG(NepaliRAGBase):
         )
 
     def process_documents(self, document_paths: List[Path]):
+        """
+
+        :param document_paths: list of pdf document paths
+        :return: dictionary of information on the extracted text
+        """
         self.logger.info(f"Processing {len(document_paths)} documents...")
         extracted_text = self.extract_text_from_documents(document_paths)
 
@@ -90,17 +103,34 @@ class NepaliLawRAG(NepaliRAGBase):
         return results
 
     def chunk_text(self, text: str) -> List[str]:
+        """
+
+        :param text: text to chunk
+        :return: list of chunks
+        """
         self.logger.info(f"Chunking text of {len(text)}...")
         chunks = self.text_splitter.split_text(text)
         self.logger.info(f"Chunked text in {len(chunks)} chunks...")
         return chunks
 
     def embed_text(self, chunked_text: list[str]) -> np.ndarray:
+        """
+
+        :param chunked_text: list of chunks
+        :return: numpy array of embeddings
+        """
         self.logger.info(f"Embedding text of {len(chunked_text)}...")
         embeddings = [self.embeddings_gen_instance.encode(chunk) for chunk in tqdm(chunked_text, desc="Embedding text")]
         return np.array(embeddings)
 
     def save_embeddings(self, chunks: List[str], embeddings: np.ndarray, metadata: List[Dict]) -> str:
+        """
+
+        :param chunks: list of chunks
+        :param embeddings: numpy array of embeddings
+        :param metadata: list of metadata (dictionary)
+        :return: batch id
+        """
         self.logger.info(f"Saving embeddings of {len(chunks)} chunks...")
 
         import uuid
@@ -120,6 +150,12 @@ class NepaliLawRAG(NepaliRAGBase):
         return batch_id
 
     def retrieve_results(self, query: str, top_k: int = 5):
+        """
+
+        :param query: user query
+        :param top_k: number of results to retrieve
+        :return: results as a list of dictionaries
+        """
         self.logger.info(f"Retrieving results for {query}...")
         query_em = self.embeddings_gen_instance.encode(query)
         results = self.collection.query(
@@ -127,6 +163,7 @@ class NepaliLawRAG(NepaliRAGBase):
             n_results=top_k,
             include=["documents", "metadatas", "distances"]
         )
+        print(results)
         formatted_results = [{
             "text": results["documents"][0][i],
             "metadata": results["metadatas"][0][i],
@@ -136,6 +173,12 @@ class NepaliLawRAG(NepaliRAGBase):
         return formatted_results
 
     def get_context_for_query(self, query: str, top_k: int = 5):
+        """
+
+        :param query: user query
+        :param top_k: number of results to retrieve
+        :return: context as a list
+        """
         results = self.retrieve_results(query, top_k)
 
         results.sort(key=lambda x: x["similarity"], reverse=True)
@@ -148,6 +191,12 @@ class NepaliLawRAG(NepaliRAGBase):
         return context
 
     def search_law_amendments(self, query: str, top_k: int = 5) -> Dict[str, Any]:
+        """
+
+        :param query: user query
+        :param top_k: number of results to retrieve
+        :return: dictionary with results
+        """
         results = self.retrieve_results(query, top_k)
 
         grouped_results = {}
