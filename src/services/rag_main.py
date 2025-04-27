@@ -22,7 +22,8 @@ class NepaliLawRAG(NepaliRAGBase):
 
         :param model_name: sentence transformer model name
         :param chunk_size: chunk size
-        :param use_heavy: used for experimenting
+        :param use_heavy: the sentence transformer model which i've used is very heavy so i have this parameter to prevent from calling the instance everytime (even while testing the code)
+         which makes my computer slow
         :param chunk_overlap: size of overlap between chunks
         :param collection_name: chromadb collection name
         """
