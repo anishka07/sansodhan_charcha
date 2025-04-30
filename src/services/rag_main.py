@@ -164,7 +164,6 @@ class NepaliLawRAG(NepaliRAGBase):
             n_results=top_k,
             include=["documents", "metadatas", "distances"]
         )
-        print(results)
         formatted_results = [{
             "text": results["documents"][0][i],
             "metadata": results["metadatas"][0][i],

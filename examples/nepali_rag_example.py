@@ -1,8 +1,8 @@
 import time
-import json
 
 from src.services.rag_main import NepaliLawRAG
 from src.utils.settings import ConstantSettings, PathSettings
+
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -16,9 +16,9 @@ if __name__ == "__main__":
     document_paths = [PathSettings.PDF_DIR / "monopoly.pdf", PathSettings.PDF_DIR / "example1.pdf"]
 
     a = r.process_documents(document_paths=document_paths)
-    # with open("eg.json", "w") as f:
-    #     json.dump(a, f, indent=4)
-    # print("done")
-    print(a['example1']['chunks'])
+    query = "What are the monopoly speed die rules?"
+    search_results = r.search_law_amendments(query, top_k=3)
 
-    print(f"Total time taken: {time.time() - start_time}")
+    from pprint import pprint
+
+    pprint(search_results)

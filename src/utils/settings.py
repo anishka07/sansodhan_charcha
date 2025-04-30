@@ -17,10 +17,4 @@ class ConstantSettings:
     EMBEDDING_MODEL: str = "BAAI/bge-m3"
     CHUNK_SIZE: int = 150
     CHUNK_OVERLAP: int = 20
-
-
-if __name__ == '__main__':
-    print(PathSettings.LOG_DIR)
-    print(PathSettings.CHROMA_DIR)
-    print(PathSettings.CACHE_DIR)
-    print(PathSettings.PDF_DIR)
+    RESPONSE_PROMPT: str = """You are a rag. this is the user context {} and this is the user query {}. you are only supposed to reply in nepali language."""

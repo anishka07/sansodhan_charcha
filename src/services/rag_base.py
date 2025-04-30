@@ -27,7 +27,7 @@ class STSingleton:
 
     def _initialize(self, model_name: str):
         self.model_name = model_name
-        self.model = SentenceTransformer(model_name)
+        self.model = SentenceTransformer(model_name_or_path=model_name)
 
     def get_model(self):
         return self.model
