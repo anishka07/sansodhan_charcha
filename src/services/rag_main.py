@@ -14,31 +14,16 @@ class NepaliLawRAG(NepaliRAGBase):
             self,
             model_name: str,
             chunk_size: int,
-            use_heavy: bool,
             chunk_overlap: int,
-            collection_name: str = None
     ):
         """
 
         :param model_name: sentence transformer model name
         :param chunk_size: chunk size
-        :param use_heavy: the sentence transformer model which i've used is very heavy so i have this parameter to prevent from calling the instance everytime (even while testing the code)
-         which makes my computer slow
         :param chunk_overlap: size of overlap between chunks
-        :param collection_name: chromadb collection name
         """
         super().__init__(chunk_size, model_name, use_heavy)
         self.chunk_overlap = chunk_overlap
-        # remove this 
-        if use_heavy:
-            if collection_name is None:
-                self.collection_name = "law_chroma_collection"        
-            self.collection = self.chroma_client.get_or_create_collection(
-                name=self.collection_name,
-                metadata={"description": "Nepali law amendments and legal documents"},
-            )
-            self.logger.info(f"Chroma db collection {self.collection_name} initialized.")
-
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=self.chunk_size,
             chunk_overlap=self.chunk_overlap,
@@ -94,12 +79,13 @@ class NepaliLawRAG(NepaliRAGBase):
                 self._save_cache(doc_name, embeddings, "embeddings")
                 self._save_cache(doc_name, chunk_metadata, "metadata")
 
-            doc_id = self.save_embeddings(chunks, embeddings, chunk_metadata)
+            doc_id = self.save_embeddings(chunks, embeddings, chunk_metadata, )
             results[doc_name] = {
                 "text_len": len(text),
                 "chunks": chunks,
                 "doc_id": doc_id
             }
+            print(results)
         self.logger.info(f"Finished processing {len(results)} documents.")
         return results
 
@@ -124,9 +110,8 @@ class NepaliLawRAG(NepaliRAGBase):
         embeddings = [self.embeddings_gen_instance.encode(chunk) for chunk in tqdm(chunked_text, desc="Embedding text")]
         return np.array(embeddings)
 
-    def save_embeddings(self, chunks: List[str], embeddings: np.ndarray, metadata: List[Dict]) -> str:
+    def save_embeddings(self, doc_key, chunks: List[str], embeddings: np.ndarray, metadata: List[Dict]) -> str:
         """
-
         :param chunks: list of chunks
         :param embeddings: numpy array of embeddings
         :param metadata: list of metadata (dictionary)
@@ -141,7 +126,9 @@ class NepaliLawRAG(NepaliRAGBase):
         for meta in metadata:
             meta["batch_id"] = batch_id
 
-        self.collection.add(
+        collection_name = f"{doc_key}_collection"
+        collection = self.chroma_client.create_collection(collection_name)
+        collection.add(
             embeddings=embeddings.tolist(),
             documents=chunks,
             metadatas=metadata,

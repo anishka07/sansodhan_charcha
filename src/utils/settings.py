@@ -14,6 +14,7 @@ class PathSettings:
 
 @dataclass(frozen=True)
 class ConstantSettings:
+    PERSIST_DIRECTORY: Path = BASE_DIR / "chroma_db"
     EMBEDDING_MODEL: str = "BAAI/bge-m3"
     CHUNK_SIZE: int = 150
     CHUNK_OVERLAP: int = 20

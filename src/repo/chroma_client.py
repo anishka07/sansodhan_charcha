@@ -23,7 +23,10 @@ class ChromaClientSingleton:
     def _initialize(self, persist_directory: Path=PathSettings.CHROMA_DIR):
         self.persist_directory = str(persist_directory)
         self.client = Client(Settings(persist_directory=self.persist_directory, anonymized_telemetry=False))
-    
+
+    def create_collection(self, collection_name: str):
+        return self.client.get_or_create_collection(collection_name)
+
     def get_client(self):
         return self.client
 

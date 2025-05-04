@@ -10,15 +10,8 @@ if __name__ == "__main__":
         chunk_size=ConstantSettings.CHUNK_SIZE,
         model_name=ConstantSettings.EMBEDDING_MODEL,
         chunk_overlap=ConstantSettings.CHUNK_OVERLAP,
-        use_heavy=True
     )
 
     document_paths = [PathSettings.PDF_DIR / "monopoly.pdf", PathSettings.PDF_DIR / "example1.pdf"]
 
-    a = r.process_documents(document_paths=document_paths)
-    query = "What are the monopoly speed die rules?"
-    search_results = r.search_law_amendments(query, top_k=3)
-
-    from pprint import pprint
-
-    pprint(search_results)
+    r.process_documents(document_paths=document_paths)
