@@ -22,7 +22,7 @@ class NepaliLawRAG(NepaliRAGBase):
         :param chunk_size: chunk size
         :param chunk_overlap: size of overlap between chunks
         """
-        super().__init__(chunk_size, model_name, use_heavy)
+        super().__init__(chunk_size, model_name)
         self.chunk_overlap = chunk_overlap
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=self.chunk_size,
